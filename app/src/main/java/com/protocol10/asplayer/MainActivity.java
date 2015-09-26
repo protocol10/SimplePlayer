@@ -1,16 +1,37 @@
 package com.protocol10.asplayer;
 
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.protocol10.asplayer.adapter.TabPagerAdapter;
+
+/**
+ * @author Akshay Mukadam
+ * @since 26/9/15
+ */
 public class MainActivity extends AppCompatActivity {
+
+    Toolbar toolbar;
+    ViewPager viewPager;
+    TabLayout tabLayout;
+    TabPagerAdapter tabPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.toolBar);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        setSupportActionBar(toolbar);
+        tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(tabPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override

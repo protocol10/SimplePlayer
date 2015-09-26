@@ -5,4 +5,8 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="AsTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:logo">@mipmap/ic_launcher</item>
+        <item name="android:name">@string/app_name</item>
+    </style>
 </resources>
