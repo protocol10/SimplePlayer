@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import utils.AppConstants;
+import com.protocol10.asplayer.utils.AppConstants;
 import com.protocol10.asplayer.fragment.AlbumFragment;
 import com.protocol10.asplayer.fragment.ArtistFragment;
 import com.protocol10.asplayer.fragment.PlayListFragment;

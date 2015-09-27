@@ -3,6 +3,7 @@ package com.protocol10.asplayer.presenter;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 
@@ -12,7 +13,7 @@ import com.protocol10.asplayer.models.TrackModels;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.AppConstants;
+import com.protocol10.asplayer.utils.AppConstants;
 
 /**
  * @author Akshay Mukadam
@@ -35,18 +36,30 @@ public class TrackPresenter {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
-    public void retriveTracks() {
-        retrieveInternalTracks();
+    public void retreiveTracks() {
+        if (isSdCardPresent) {
+            retrieveTracks(AppConstants.INTERNAL, true);
+            retrieveTracks(AppConstants.EXTERNAL, false);
+        } else {
+            retrieveTracks(AppConstants.INTERNAL, true);
+        }
+
     }
 
-    private void retrieveInternalTracks() {
+    private void retrieveTracks(Uri uri, boolean internal) {
 
         Cursor cursor = getContentResolver().query(AppConstants.INTERNAL,
                 AppConstants.TRACKS_COLUMNS, "", null, MediaStore.Audio.Media.TITLE + " asc");
         if (cursor == null) {
-            trackView.showError(AppConstants.UNABLE_TAG);
+            if (isSdCardPresent && !internal)
+                updateErrorView(AppConstants.UNABLE_TAG);
+            else if (!isSdCardPresent && internal)
+                updateErrorView(AppConstants.UNABLE_TAG);
         } else if (!cursor.moveToFirst()) {
-            trackView.showError(AppConstants.NOMEDIA_TAG);
+            if (isSdCardPresent && !internal)
+                updateErrorView(AppConstants.NOMEDIA_TAG);
+            else if (!isSdCardPresent && internal)
+                updateErrorView(AppConstants.NOMEDIA_TAG);
         } else {
             do {
                 String trackName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
@@ -64,15 +77,12 @@ public class TrackPresenter {
             } while (cursor.moveToNext());
             cursor.close();
         }
-        if (isSdCardPresent) {
-            retrieveExternalTracks();
-        } else {
+        if (!list.isEmpty())
             trackView.populateTracks(list);
-        }
     }
 
-    private void retrieveExternalTracks() {
-
+    private void updateErrorView(String error) {
+        trackView.showError(error);
     }
 
     private ContentResolver getContentResolver() {

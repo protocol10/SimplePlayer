@@ -1,15 +1,20 @@
 package com.protocol10.asplayer.models;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * @author Akshay Mukadam
  * @since 26/9/15.
  */
-public class TrackModels {
+public class TrackModels extends RealmObject {
+
+    @PrimaryKey
+    private long trackId;
     private String artistName;
     private String albumName;
     private String songName;
     private long duration;
-    private long trackId;
     private String trackPath;
     private long albumId;
     private long artistId;

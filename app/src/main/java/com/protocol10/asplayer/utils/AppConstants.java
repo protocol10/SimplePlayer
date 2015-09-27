@@ -1,4 +1,4 @@
-package utils;
+package com.protocol10.asplayer.utils;
 
 import android.net.Uri;
 import android.provider.MediaStore;

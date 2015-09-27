@@ -3,6 +3,9 @@ package com.protocol10.asplayer.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +24,10 @@ import java.util.List;
  */
 public class TrackFragment extends Fragment implements ITrackView {
 
+    RecyclerView mRecyclerView;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    RecyclerView.LayoutManager mLayoutManager;
+
     @Nullable
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,9 +37,12 @@ public class TrackFragment extends Fragment implements ITrackView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        TrackPresenter trackPresenter = new TrackPresenter(this, getActivity());
-        trackPresenter.retriveTracks();
-        return inflater.inflate(R.layout.fragment_songs, container, false);
+        View view = inflater.inflate(R.layout.fragment_songs, container, false);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        return view;
     }
 
     @Override
@@ -43,6 +53,17 @@ public class TrackFragment extends Fragment implements ITrackView {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+
+        } else {
+            initUi();
+        }
+    }
+
+    private void initUi() {
+        TrackPresenter trackPresenter = new TrackPresenter(this, getActivity());
+        trackPresenter.retreiveTracks();
+
     }
 
     @Override
