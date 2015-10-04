@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">AS Player</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Dummy Names-->
+    <string name="track_name">Summer of 69</string>
+    <string name="artist_name">Bryan Adams</string>
 </resources>

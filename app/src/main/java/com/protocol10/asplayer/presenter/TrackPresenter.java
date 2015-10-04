@@ -15,6 +15,10 @@ import java.util.List;
 
 import com.protocol10.asplayer.utils.AppConstants;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+
 /**
  * @author Akshay Mukadam
  * @since 26/9/15.
@@ -25,11 +29,15 @@ public class TrackPresenter {
     List<TrackModels> list = new ArrayList<>();
     Context context;
     private boolean isSdCardPresent = false;
+    private static final String SELECTION = MediaStore.Audio.Media.IS_MUSIC + " !=0 AND " +
+            MediaStore.Audio.Media.DURATION + " > 60000";
+    Realm realm;
 
     public TrackPresenter(ITrackView trackView, Context context) {
         this.trackView = trackView;
         this.context = context;
         isSdCardPresent = checkForSdCard();
+        realm = Realm.getInstance(context);
     }
 
     private boolean checkForSdCard() {
@@ -37,6 +45,7 @@ public class TrackPresenter {
     }
 
     public void retreiveTracks() {
+        clearDB();
         if (isSdCardPresent) {
             retrieveTracks(AppConstants.INTERNAL, true);
             retrieveTracks(AppConstants.EXTERNAL, false);
@@ -46,10 +55,21 @@ public class TrackPresenter {
 
     }
 
+    public void retrieveFromDataBase() {
+        RealmQuery<TrackModels> query = realm.where(TrackModels.class);
+        List<TrackModels> results = query.findAll();
+    }
+
+    public void clearDB() {
+        realm.beginTransaction();
+        realm.clear(TrackModels.class);
+        realm.commitTransaction();
+    }
+
     private void retrieveTracks(Uri uri, boolean internal) {
 
-        Cursor cursor = getContentResolver().query(AppConstants.INTERNAL,
-                AppConstants.TRACKS_COLUMNS, "", null, MediaStore.Audio.Media.TITLE + " asc");
+        Cursor cursor = getContentResolver().query(uri, AppConstants.TRACKS_COLUMNS,
+                SELECTION, null, MediaStore.Audio.Media.TITLE + " ASC");
         if (cursor == null) {
             if (isSdCardPresent && !internal)
                 updateErrorView(AppConstants.UNABLE_TAG);
@@ -70,9 +90,13 @@ public class TrackPresenter {
                 long artistId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
                 String albumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
                 String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                TrackModels trackModels = new TrackModels.TrackBuilder(trackName, trackPath,
-                        trackId, duration).setAlbumId(albumId).setArtistId(artistId).
-                        setAlbumName(albumName).setArtistName(artist).build();
+
+                // Save TrackModel Object
+                TrackModels trackModels = new TrackModels(trackId, artist, albumName, trackName,
+                        duration, trackPath, albumId, artistId);
+                realm.beginTransaction();
+                realm.copyToRealmOrUpdate(trackModels);
+                realm.commitTransaction();
                 list.add(trackModels);
             } while (cursor.moveToNext());
             cursor.close();

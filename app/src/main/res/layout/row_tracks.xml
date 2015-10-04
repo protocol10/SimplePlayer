@@ -4,7 +4,25 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textV"
+        android:id="@+id/trackTextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:singleLine="true"
+        android:text="@string/track_name"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/artistTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/trackTextView"
+        android:ellipsize="end"
+        android:paddingLeft="16dp"
+        android:singleLine="true"
+        android:text="@string/artist_name"
+        android:textSize="14sp" />
 </RelativeLayout>

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.protocol10.asplayer.R;
 import com.protocol10.asplayer.models.TrackModels;
@@ -28,13 +29,15 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackHolder>
     @Override
     public TrackHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.fragment_songs, parent, false);
+        View view = inflater.inflate(R.layout.row_tracks, parent, false);
         return new TrackHolder(view);
     }
 
     @Override
     public void onBindViewHolder(TrackHolder holder, int position) {
-
+        TrackModels trackModels = list.get(position);
+        holder.trackTextView.setText(trackModels.getSongName());
+        holder.artistTextView.setText(trackModels.getArtistName());
     }
 
     @Override
@@ -43,9 +46,13 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackHolder>
     }
 
     class TrackHolder extends RecyclerView.ViewHolder {
+        TextView trackTextView;
+        TextView artistTextView;
 
         public TrackHolder(View itemView) {
             super(itemView);
+            trackTextView = (TextView) itemView.findViewById(R.id.trackTextView);
+            artistTextView = (TextView) itemView.findViewById(R.id.artistTextView);
         }
     }
 }

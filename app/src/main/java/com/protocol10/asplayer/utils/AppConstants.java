@@ -26,4 +26,7 @@ public class AppConstants {
             MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.ALBUM_ID, MediaStore.Audio.Media.ARTIST_ID};
+    public static final String IS_DATA_CLEARED = "isDataCleared";
+    public static final String IS_DATA_PRESENT = "isDataPresent`";
+    public static final String TRACK_LIST = "trackList";
 }

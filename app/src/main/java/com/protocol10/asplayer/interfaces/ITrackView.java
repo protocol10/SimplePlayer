@@ -12,4 +12,8 @@ public interface ITrackView {
     void populateTracks(List<TrackModels> list);
 
     void showError(String errorStr);
+
+    void populateFromDataBase(List<TrackModels> list);
+
 }
+
